@@ -15,6 +15,25 @@ module.exports = {
 
         const userInDb = await Players.findOne({ where: { USER_ID: user.id } });
 
+        function mode(array) {
+            if (array.length == 0)
+                return null;
+            var modeMap = {};
+            var maxEl = array[0], maxCount = 1;
+            for (var i = 0; i < array.length; i++) {
+                var el = array[i];
+                if (modeMap[el] == null)
+                    modeMap[el] = 1;
+                else
+                    modeMap[el]++;
+                if (modeMap[el] > maxCount) {
+                    maxEl = el;
+                    maxCount = modeMap[el];
+                }
+            }
+            return maxEl;
+        }
+
         if (userInDb) {
             const level = userInDb.get('LVL');
             const exp = userInDb.get('EXP');
@@ -24,8 +43,15 @@ module.exports = {
             const move3 = userInDb.get('MOVE_THREE');
             const hmType = userInDb.get('TYPE');
             const btlsWon = userInDb.get('BTLS_WON');
-            const favMove = userInDb.get('FAV_MOVE');
+            const favMoveArray = userInDb.get('FAV_MOVE');
             const statPts = userInDb.get('STAT_PTS');
+
+            let favMove;
+            if (!favMoveArray.length) {
+                favMove = "No moves used";
+            } else {
+                favMove = mode(favMoveArray);
+            }
             
             const profEmbed = new EmbedBuilder()
                 .setTitle(`${user.username}'s Profile | Type: ` + hmType.toString())
@@ -43,7 +69,7 @@ module.exports = {
                     { name: 'Stat points:', value: '`' + statPts + '`', inline: true },
                     { name: 'Battles won:', value: '`' + btlsWon + '`', inline: true },
                     { name: 'Favorite move:', value: '`' + favMove + '`', inline: true }
-                    
+
                 )
 
             message.channel.send({ embeds: [profEmbed] });
