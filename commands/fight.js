@@ -433,7 +433,6 @@ module.exports = {
                     .setURL(turn.avatarURL())
                     .setColor('000000')
                     .setThumbnail(turn.avatarURL())
-                    //.setFooter({ text: `Last action: ${lastAction}` })
                     .addFields(
                         { name: player1.username, value: `**HP** ${hpBar1 + cur_p1hp}/${p1hp}`, inline: true },
                         { name: 'Status', value: statEmj1.join(''), inline: true },
