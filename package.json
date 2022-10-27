@@ -1,0 +1,11 @@
+{
+  "name": "new-hypemon-bot",
+  "author": "Parallax",
+  "description": "Pokemon style discord bot customized to the.. tram",
+  "dependencies": {
+    "discord.js": "^14.5.0",
+    "node": "^18.9.1",
+    "sequelize": "^6.23.2",
+    "sqlite3": "^5.1.1"
+  }
+}
