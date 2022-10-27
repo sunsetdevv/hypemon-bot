@@ -427,16 +427,16 @@ module.exports = {
                 getStatEmj();
 
                 let fightEmbed = new EmbedBuilder()
-                    .setAuthor({ name: player1.username + ` (${p1type}) vs ` + player2.username + ` (${p2type})` })
+                    .setAuthor({ name: `${player1.username} vs ${player2.username}` })
                     .setTitle(`${turn.username}'s turn`)
                     .setURL(turn.avatarURL())
                     .setColor('000000')
                     .setThumbnail(turn.avatarURL())
                     .addFields(
-                        { name: player1.username, value: `**HP** ${hpBar1 + cur_p1hp}/${p1hp}`, inline: true },
+                        { name: `${player1.username} (Lvl ${p1lvl}, ${p1type})`, value: `**HP** ${hpBar1 + cur_p1hp}/${p1hp}`, inline: true },
                         { name: 'Status', value: statEmj1.join(''), inline: true },
                         { name: '\u200B', value: '\u200B', inline: true },
-                        { name: player2.username, value: `**HP** ${hpBar2 + cur_p2hp}/${p2hp}`, inline: true },
+                        { name: `${player2.username} (Lvl ${p2lvl}, ${p2type})`, value: `**HP** ${hpBar2 + cur_p2hp}/${p2hp}`, inline: true },
                         { name: 'Status', value: statEmj2.join(''), inline: true },
                         { name: '\u200B', value: '\u200B', inline: true },
                         { name: 'Last action:', value: lastAction, inline: true }
@@ -457,7 +457,6 @@ module.exports = {
                         }
                     });
                 });
-
 
                 const turnOne = (move) => {
                     let canMove = true;
@@ -1443,7 +1442,6 @@ module.exports = {
                     }
                 }
 
-
                 //create collecter for message
                 const butCollector = message.channel.createMessageComponentCollector({ componentType: ComponentType.Button, idle: 20000 });
 
@@ -1488,10 +1486,10 @@ module.exports = {
                                 .setColor('000000')
                                 .setThumbnail(turn.avatarURL())
                                 .addFields(
-                                    { name: player1.username, value: `**HP** ${hpBar1 + cur_p1hp}/${p1hp}`, inline: true },
+                                    { name: `${player1.username} (Lvl ${p1lvl}, ${p1type})`, value: `**HP** ${hpBar1 + cur_p1hp}/${p1hp}`, inline: true },
                                     { name: 'Status', value: statEmj1.join(''), inline: true },
                                     { name: '\u200B', value: '\u200B', inline: true },
-                                    { name: player2.username, value: `**HP** ${hpBar2 + cur_p2hp}/${p2hp}`, inline: true },
+                                    { name: `${player2.username} (Lvl ${p2lvl}, ${p2type})`, value: `**HP** ${hpBar2 + cur_p2hp}/${p2hp}`, inline: true },
                                     { name: 'Status', value: statEmj2.join(''), inline: true },
                                     { name: '\u200B', value: '\u200B', inline: true },
                                     { name: 'Last action:', value: lastAction, inline: true }
@@ -1532,10 +1530,10 @@ module.exports = {
                                 .setColor('000000')
                                 .setThumbnail(turn.avatarURL())
                                 .addFields(
-                                    { name: player1.username, value: `**HP** ${hpBar1 + cur_p1hp}/${p1hp}`, inline: true },
+                                    { name: `${player1.username} (Lvl ${p1lvl}, ${p1type})`, value: `**HP** ${hpBar1 + cur_p1hp}/${p1hp}`, inline: true },
                                     { name: 'Status', value: statEmj1.join(''), inline: true },
                                     { name: '\u200B', value: '\u200B', inline: true },
-                                    { name: player2.username, value: `**HP** ${hpBar2 + cur_p2hp}/${p2hp}`, inline: true },
+                                    { name: `${player2.username} (Lvl ${p2lvl}, ${p2type})`, value: `**HP** ${hpBar2 + cur_p2hp}/${p2hp}`, inline: true },
                                     { name: 'Status', value: statEmj2.join(''), inline: true },
                                     { name: '\u200B', value: '\u200B', inline: true },
                                     { name: 'Last action:', value: lastAction, inline: true }
@@ -1555,7 +1553,7 @@ module.exports = {
                             const favUpdate2 = await Players.update({
                                 FAV_MOVE: p2moves
                             }, { where: { USER_ID: player2.id } });
-                            
+
 
                             if (cur_p1hp <= 0) { // player 2 wins
                                 //reset player 1 winstreak
