@@ -159,23 +159,12 @@ module.exports = {
                 let turnsGoneBy = 0;
                 let lastAction = 'No turns have gone by yet.';
                 let turn, row, damage, hpBar1, hpBar2, crit, typeAdvOne, typeAdvTwo, levelUp, statGain;
+                let p1moves = [];
+                let p2moves = [];
 
                 // GAME FUNCTIONS:
                 const calcDamage = (p1atk, p2def, power, lvl, type, critAmt) => {
                     damage = Math.ceil(((((((2 * lvl) / 5) + 2) * power * (p1atk / p2def)) / 50) + 2) * critAmt * type);
-                }
-                const spdCheck = () => {
-                    if (p1spd > p2spd) {
-                        turn = player1;
-                    } else if (p1spd < p2spd) {
-                        turn = player2;
-                    } else if (p1spd == p2spd) {
-                        if (Math.random() < 0.5) {
-                            turn = player1;
-                        } else {
-                            turn = player2;
-                        }
-                    }
                 }
                 const getLastAction = (player, move, dam, turn) => {
                     if (turnsGoneBy >= 1) {
@@ -417,7 +406,17 @@ module.exports = {
                     movesRow2.components[2].setLabel(p2move3.name);
                 }
 
-                spdCheck(); // check to see who goes first
+                if (p1spd > p2spd) { // check to see who goes first
+                    turn = player1;
+                } else if (p1spd < p2spd) {
+                    turn = player2;
+                } else if (p1spd == p2spd) {
+                    if (Math.random() < 0.5) {
+                        turn = player1;
+                    } else {
+                        turn = player2;
+                    }
+                }
                 hpBar1 = hpBarMaker(cur_p1hp, p1hp);
                 hpBar2 = hpBarMaker(cur_p2hp, p2hp);
                 if (turn == player1) { // row corresponding to turn
@@ -452,8 +451,8 @@ module.exports = {
                             movesRow2.components[0].setDisabled(true);
                             movesRow2.components[1].setDisabled(true);
                             movesRow2.components[2].setDisabled(true);
-    
-                            msg.edit({ components: [row] });
+
+                            msg.edit({ components: [] });
                             message.channel.send("Time has run out. The battle ends in a draw...");
                         }
                     });
@@ -1462,6 +1461,7 @@ module.exports = {
                                 if (p1move1.pp == 5) movesRow1.components[0].setStyle(ButtonStyle.Secondary);
                                 if (p1move1.pp == 0) movesRow1.components[0].setStyle(ButtonStyle.Danger);
                                 movesRow1.components[0].setLabel(`${p1move1.name} | ${p1move1.pp} PP`);
+                                p1moves.push(p1move1.name);
                             } else if (i.customId === 'move_two') {
                                 //player one move two
                                 await i.deferUpdate();
@@ -1469,6 +1469,7 @@ module.exports = {
                                 if (p1move2.pp == 5) movesRow1.components[0].setStyle(ButtonStyle.Secondary);
                                 if (p1move2.pp == 0) movesRow1.components[0].setStyle(ButtonStyle.Danger);
                                 movesRow1.components[1].setLabel(`${p1move2.name} | ${p1move2.pp} PP`);
+                                p1moves.push(p1move2.name);
                             } else if (i.customId === 'move_three') {
                                 //player one move three
                                 await i.deferUpdate();
@@ -1476,6 +1477,7 @@ module.exports = {
                                 if (p1move3.pp == 5) movesRow1.components[0].setStyle(ButtonStyle.Secondary);
                                 if (p1move3.pp == 0) movesRow1.components[0].setStyle(ButtonStyle.Danger);
                                 movesRow1.components[2].setLabel(`${p1move3.name} | ${p1move3.pp} PP`);
+                                p1moves.push(p1move3.name);
                             }
                             turn = player2;
                             const receivedEmbed = message.embeds[0];
@@ -1485,7 +1487,6 @@ module.exports = {
                                 .setURL(turn.avatarURL())
                                 .setColor('000000')
                                 .setThumbnail(turn.avatarURL())
-                                //.setFooter({ text: `Last action: ${lastAction}` })
                                 .addFields(
                                     { name: player1.username, value: `**HP** ${hpBar1 + cur_p1hp}/${p1hp}`, inline: true },
                                     { name: 'Status', value: statEmj1.join(''), inline: true },
@@ -1504,6 +1505,7 @@ module.exports = {
                                 if (p2move1.pp == 5) movesRow2.components[0].setStyle(ButtonStyle.Secondary);
                                 if (p2move1.pp == 0) movesRow2.components[0].setStyle(ButtonStyle.Danger);
                                 movesRow2.components[0].setLabel(`${p2move1.name} | ${p2move1.pp} PP`);
+                                p2moves.push(p2move1.name);
                             } else if (i.customId === 'move_two') {
                                 //player two move two
                                 await i.deferUpdate();
@@ -1511,6 +1513,7 @@ module.exports = {
                                 if (p2move2.pp == 5) movesRow2.components[0].setStyle(ButtonStyle.Secondary);
                                 if (p2move2.pp == 0) movesRow2.components[0].setStyle(ButtonStyle.Danger);
                                 movesRow2.components[1].setLabel(`${p2move2.name} | ${p2move2.pp} PP`);
+                                p2moves.push(p2move2.name);
                             } else if (i.customId === 'move_three') {
                                 //player two move three
                                 await i.deferUpdate();
@@ -1518,6 +1521,7 @@ module.exports = {
                                 if (p2move3.pp == 5) movesRow2.components[0].setStyle(ButtonStyle.Secondary);
                                 if (p2move3.pp == 0) movesRow2.components[0].setStyle(ButtonStyle.Danger);
                                 movesRow2.components[2].setLabel(`${p2move3.name} | ${p2move3.pp} PP`);
+                                p2moves.push(p2move3.name);
                             }
                             turn = player1;
                             const receivedEmbed = message.embeds[0];
@@ -1527,7 +1531,6 @@ module.exports = {
                                 .setURL(turn.avatarURL())
                                 .setColor('000000')
                                 .setThumbnail(turn.avatarURL())
-                                //.setFooter({ text: `Last action: ${lastAction}` })
                                 .addFields(
                                     { name: player1.username, value: `**HP** ${hpBar1 + cur_p1hp}/${p1hp}`, inline: true },
                                     { name: 'Status', value: statEmj1.join(''), inline: true },
@@ -1540,13 +1543,23 @@ module.exports = {
                             await i.editReply({ embeds: [newFightEmbed], components: [movesRow1] });
                         }
                         if (cur_p1hp <= 0 || cur_p2hp <= 0) { //someone loses
-                            i.editReply({ embeds: [fightEmbed], components: [] });
+                            i.editReply({ components: [] });
                             butCollector.stop();
                             fightActive = false;
 
+                            //updating moves in database for favorite move
+                            const favUpdate1 = await Players.update({
+                                FAV_MOVE: p1moves
+                            }, { where: { USER_ID: player1.id } });
+
+                            const favUpdate2 = await Players.update({
+                                FAV_MOVE: p2moves
+                            }, { where: { USER_ID: player2.id } });
+                            
+
                             if (cur_p1hp <= 0) { // player 2 wins
                                 //reset player 1 winstreak
-                                const resetWinStrk1 = await Players.update({ WINSTREAK: 0}, { where: { USER_ID: player1.id } });
+                                const resetWinStrk1 = await Players.update({ WINSTREAK: 0 }, { where: { USER_ID: player1.id } });
                                 //player 2 stuff
                                 const exp2 = expGain(typeAdvTwo, p2lvl, p1lvl);
                                 const geo2 = geoGain(p2lvl, p1lvl);
@@ -1567,15 +1580,13 @@ module.exports = {
                                     message.channel.send(`<@${player2.id}> is now level **${p2lvl + 1}**, and has earned ${statGain} stat points!`);
 
                                     const updatep2 = await Players.update({
-                                        LVL: p2lvl + 1,
                                         EXP: p2exp + exp2,
                                         GEO: p2geo + geo2,
                                         STAT_PTS: p2statpoints + statGain,
                                         TOTAL_GEO: p2totalgeo + geo2
                                     }, { where: { USER_ID: player2.id } });
-                                    
-                                    player2db.increment('BTLS_WON');
-                                    player2db.increment('WINSTREAK');
+
+                                    player2db.increment('LVL');
                                 } else {
                                     //db update, no level up
                                     const updatep2 = await Players.update({
@@ -1583,13 +1594,12 @@ module.exports = {
                                         GEO: p2geo + geo2,
                                         TOTAL_GEO: p2totalgeo + geo2
                                     }, { where: { USER_ID: player2.id } });
-                                    
-                                    player2db.increment('BTLS_WON');
-                                    player2db.increment('WINSTREAK');
                                 }
+                                player2db.increment('BTLS_WON');
+                                player2db.increment('WINSTREAK');
                             } else if (cur_p2hp <= 0) { // player 1 wins
                                 //reset player 2 winstreak
-                                const resetWinStrk2 = await Players.update({ WINSTREAK: 0}, { where: { USER_ID: player2.id } });
+                                const resetWinStrk2 = await Players.update({ WINSTREAK: 0 }, { where: { USER_ID: player2.id } });
                                 //player 1 stuff
                                 const exp1 = expGain(typeAdvOne, p1lvl, p2lvl);
                                 const geo1 = geoGain(p1lvl, p2lvl);
@@ -1610,15 +1620,13 @@ module.exports = {
                                     message.channel.send(`<@${player1.id}> is now level **${p1lvl + 1}**, and has earned ${statGain} stat points!`);
 
                                     const updatep1 = await Players.update({
-                                        LVL: p1lvl + 1,
                                         EXP: p1exp + exp1,
                                         GEO: p1geo + geo1,
                                         STAT_PTS: p1statpoints + statGain,
                                         TOTAL_GEO: p1totalgeo + geo1
                                     }, { where: { USER_ID: player1.id } });
-                                    
-                                    player1db.increment('BTLS_WON');
-                                    player1db.increment('WINSTREAK');
+
+                                    player1db.increment('LVL');
                                 } else {
                                     //db update, no level up
                                     const updatep1 = await Players.update({
@@ -1626,28 +1634,13 @@ module.exports = {
                                         GEO: p1geo + geo1,
                                         TOTAL_GEO: p1totalgeo + geo1
                                     }, { where: { USER_ID: player1.id } });
-                                    
-                                    player1db.increment('BTLS_WON');
-                                    player1db.increment('WINSTREAK');
                                 }
+                                player1db.increment('BTLS_WON');
+                                player1db.increment('WINSTREAK');
                             }
                         }
                     }
                 });
-                /*
-                butCollector.on('end', async (collected, reason) => {
-                    if (reason == 'idle') {
-                        movesRow1.components[0].setDisabled(true);
-                        movesRow1.components[1].setDisabled(true);
-                        movesRow1.components[2].setDisabled(true);
-                        movesRow2.components[0].setDisabled(true);
-                        movesRow2.components[1].setDisabled(true);
-                        movesRow2.components[2].setDisabled(true);
-
-                        i.update({ components: i.components });
-                        message.channel.send("Time has run out. The battle ends in a draw...");
-                    }
-                });*/
             }
         }
     }
