@@ -158,6 +158,7 @@ module.exports = {
                 //declarations for during the game
                 let turnsGoneBy = 0;
                 let lastAction = 'No turns have gone by yet.';
+                let battleLog = [];
                 let turn, row, damage, hpBar1, hpBar2, crit, typeAdvOne, typeAdvTwo, levelUp, statGain;
                 let p1moves = [];
                 let p2moves = [];
@@ -445,13 +446,6 @@ module.exports = {
                 message.channel.send({ embeds: [fightEmbed], components: [row] }).then(msg => {
                     butCollector.on('end', async (collected, reason) => {
                         if (reason == 'idle') {
-                            movesRow1.components[0].setDisabled(true);
-                            movesRow1.components[1].setDisabled(true);
-                            movesRow1.components[2].setDisabled(true);
-                            movesRow2.components[0].setDisabled(true);
-                            movesRow2.components[1].setDisabled(true);
-                            movesRow2.components[2].setDisabled(true);
-
                             msg.edit({ components: [] });
                             message.channel.send("Time has run out. The battle ends in a draw...");
                         }
@@ -633,23 +627,6 @@ module.exports = {
                                         if (move.name == 'Quiz') {
                                             //special move
 
-                                        } else if (move.name == 'Alt account') {
-                                            p1status.def.duration.push(move.effectDur);
-                                            p1status.def.amount.push(move.effectAmt);
-
-                                            if (Math.random() < 0.10) {
-                                                crit = 1.5;
-                                            } else {
-                                                crit = 1;
-                                            }
-                                            getTypeAdv(move.type, p2type);
-                                            calcDamage(p1atk, p2def, move.power, p1lvl, typeAdvOne, crit);
-                                            cur_p2hp -= damage;
-                                            if (cur_p2hp <= 0) {
-                                                cur_p2hp = 0;
-                                            }
-                                            hpBar2 = hpBarMaker(cur_p2hp, p2hp);
-                                            getLastAction(player1.username, move.name, damage, 1);
                                         } else {
                                             //attack move with AADS effect
                                             if (Math.random() < 0.10) {
@@ -1125,23 +1102,6 @@ module.exports = {
                                         if (move.name == 'Quiz') {
                                             //special move
 
-                                        } else if (move.name == 'Alt account') {
-                                            p2status.def.duration.push(move.effectDur);
-                                            p2status.def.amount.push(move.effectAmt);
-
-                                            if (Math.random() < 0.10) {
-                                                crit = 1.5;
-                                            } else {
-                                                crit = 1;
-                                            }
-                                            getTypeAdv(move.type, p1type);
-                                            calcDamage(p2atk, p1def, move.power, p2lvl, typeAdvTwo, crit);
-                                            cur_p1hp -= damage;
-                                            if (cur_p1hp <= 0) {
-                                                cur_p1hp = 0;
-                                            }
-                                            hpBar1 = hpBarMaker(cur_p1hp, p1hp);
-                                            getLastAction(player2.username, move.name, damage, 2);
                                         } else {
                                             //attack move with AADS effect
                                             if (Math.random() < 0.10) {
@@ -1452,7 +1412,7 @@ module.exports = {
                     } else {
                         turnsGoneBy++;
                         if (turn.id == player1.id) {
-                            if (i.customId === 'move_one') {
+                            if (i.customId == 'move_one') {
                                 //player one move one
                                 await i.deferUpdate();
                                 turnOne(p1move1);
@@ -1460,7 +1420,7 @@ module.exports = {
                                 if (p1move1.pp == 0) movesRow1.components[0].setStyle(ButtonStyle.Danger);
                                 movesRow1.components[0].setLabel(`${p1move1.name} | ${p1move1.pp} PP`);
                                 p1moves.push(p1move1.name);
-                            } else if (i.customId === 'move_two') {
+                            } else if (i.customId == 'move_two') {
                                 //player one move two
                                 await i.deferUpdate();
                                 turnOne(p1move2);
@@ -1468,7 +1428,7 @@ module.exports = {
                                 if (p1move2.pp == 0) movesRow1.components[0].setStyle(ButtonStyle.Danger);
                                 movesRow1.components[1].setLabel(`${p1move2.name} | ${p1move2.pp} PP`);
                                 p1moves.push(p1move2.name);
-                            } else if (i.customId === 'move_three') {
+                            } else if (i.customId == 'move_three') {
                                 //player one move three
                                 await i.deferUpdate();
                                 turnOne(p1move3);
@@ -1496,7 +1456,7 @@ module.exports = {
                                 )
                             await i.editReply({ embeds: [newFightEmbed], components: [movesRow2] });
                         } else if (turn.id == player2.id) {
-                            if (i.customId === 'move_one') {
+                            if (i.customId == 'move_one') {
                                 //player two move one
                                 await i.deferUpdate();
                                 turnTwo(p2move1);
@@ -1504,7 +1464,7 @@ module.exports = {
                                 if (p2move1.pp == 0) movesRow2.components[0].setStyle(ButtonStyle.Danger);
                                 movesRow2.components[0].setLabel(`${p2move1.name} | ${p2move1.pp} PP`);
                                 p2moves.push(p2move1.name);
-                            } else if (i.customId === 'move_two') {
+                            } else if (i.customId == 'move_two') {
                                 //player two move two
                                 await i.deferUpdate();
                                 turnTwo(p2move2);
@@ -1512,7 +1472,7 @@ module.exports = {
                                 if (p2move2.pp == 0) movesRow2.components[0].setStyle(ButtonStyle.Danger);
                                 movesRow2.components[1].setLabel(`${p2move2.name} | ${p2move2.pp} PP`);
                                 p2moves.push(p2move2.name);
-                            } else if (i.customId === 'move_three') {
+                            } else if (i.customId == 'move_three') {
                                 //player two move three
                                 await i.deferUpdate();
                                 turnTwo(p2move3);
