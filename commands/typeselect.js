@@ -72,11 +72,6 @@ module.exports = {
                         label: 'Savvy type',
                         description: 'I am 48 parallel dimensions ahead of you',
                         value: 'savvy'
-                    },
-                    {
-                        label: 'Main page',
-                        description: 'Back to the starting page',
-                        value: 'main'
                     }
                 ),
         )
@@ -101,7 +96,15 @@ module.exports = {
                 .setCustomId('no')
         )
 
-        message.channel.send({ embeds: [typeEmbed], components: [row1, row2] });
+        message.channel.send({ embeds: [typeEmbed], components: [row1, row2] }).then(msg => {
+            menuCollector.on('end', async (collected, reason) => {
+                if (reason == 'idle') {
+                    row1.components[0].setDisabled(true);
+                    row2.components[0].setDisabled(true);
+                    msg.edit({ components: [row1, row2] });
+                }
+            });
+        });
 
         const butCollector = message.channel.createMessageComponentCollector({ componentType: ComponentType.Button });
 
@@ -158,9 +161,6 @@ module.exports = {
                 typ = 'Savvy';
             }
 
-            if (value === 'main') {
-                collected.update({ embeds: [typeEmbed], components: [row1, row2] });
-            }
         });
 
         butCollector.on('collect', async i => {
@@ -204,7 +204,7 @@ module.exports = {
                             ITEMS: [],
                             STAT_PTS: 0,
                             BTLS_WON: 0,
-                            FAV_MOVE: 'No moves used',
+                            FAV_MOVE: [],
                             TOTAL_GEO: 0,
                             WINSTREAK: 0,
                             MOVES_USED: 0,
@@ -218,9 +218,9 @@ module.exports = {
                     }
                 } else if (i.customId === 'no') {
                     await i.deferUpdate();
-                    await i.editReply({ embeds: [typeEmbed], components: [row1, row2] })
+                    await i.editReply({ embeds: [typeEmbed], components: [row1, row2] });
                 }
             }
-        })
+        });
     }
 }
