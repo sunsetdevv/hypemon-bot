@@ -6,20 +6,24 @@ module.exports = {
     async execute(message, args) {
         //leaderboards: battles won, moves used, exp, level, total earned geo, total current geo, win streak
 
+        const userDb = await Players.findOne({ where: { USER_ID: message.author.id } });
+        if (!userDb) return message.reply('You must join HypeMon to use this command! Try using `hm ts` first.');
+
         const filter = i => i.user.id === message.author.id;
 
-        const dbValues = await Players.findAll({ attributes: ['USERNAME', 'BTLS_WON', 'LVL', 'EXP', 'TOTAL_GEO', 'WINSTREAK', 'MOVES_USED'] });
-        
-        /*
-        const battles = dbValues.map(t => `**${t.USERNAME}:** ${t.BTLS_WON}`).join('\n');
-        const levels = dbValues.map(t => `**${t.USERNAME}:** ${t.LVL}`).join('\n');
-        const exps = dbValues.map(t => `**${t.USERNAME}:** ${t.EXP}`).join('\n');
-        const totalgeos = dbValues.map(t => `**${t.USERNAME}:** ${t.TOTAL_GEO}`).join('\n');
-        const winstreaks = dbValues.map(t => `**${t.USERNAME}:** ${t.WINSTREAK}`).join('\n');
-        const movess = dbValues.map(t => `**${t.USERNAME}:** ${t.MOVES_USED}`).join('\n');
+        const battles_db = await Players.findAll({ attributes: ['USERNAME', 'BTLS_WON'], order: [['BTLS_WON', 'DESC']] });
+        const levels_db = await Players.findAll({ attributes: ['USERNAME', 'LVL'], order: [['LVL', 'DESC']] });
+        const exps_db = await Players.findAll({ attributes: ['USERNAME', 'EXP'], order: [['EXP', 'DESC']] });
+        const totalgeos_db = await Players.findAll({ attributes: ['USERNAME', 'TOTAL_GEO'], order: [['TOTAL_GEO', 'DESC']] });
+        const winstreaks_db = await Players.findAll({ attributes: ['USERNAME', 'WINSTREAK'], order: [['WINSTREAK', 'DESC']] });
+        const movess_db = await Players.findAll({ attributes: ['USERNAME', 'MOVES_USED'], order: [['MOVES_USED', 'DESC']] });
 
-        const geoSort = (Array.from(dbValues.map(t => t.TOTAL_GEO))).sort((a, b) => { return a + b; } );
-        */
+        const battles = battles_db.map(t => `**${t.USERNAME}:** ${t.BTLS_WON}`).join('\n');
+        const levels = levels_db.map(t => `**${t.USERNAME}:** ${t.LVL}`).join('\n');
+        const exps = exps_db.map(t => `**${t.USERNAME}:** ${t.EXP}`).join('\n');
+        const totalgeos = totalgeos_db.map(t => `**${t.USERNAME}:** ${t.TOTAL_GEO}`).join('\n');
+        const winstreaks = winstreaks_db.map(t => `**${t.USERNAME}:** ${t.WINSTREAK}`).join('\n');
+        const movess = movess_db.map(t => `**${t.USERNAME}:** ${t.MOVES_USED}`).join('\n');
 
         const mainEmbed = new EmbedBuilder()
             .setTitle('HypeMon Leaderboards')
@@ -32,22 +36,22 @@ module.exports = {
         const btlswonEmbed = new EmbedBuilder()
             .setTitle("Battles Won")
             .setAuthor({ name: "HypeMon Leaderboards" })
-            //.setDescription(battles)
+            .setDescription(battles)
 
         const movesusedEmbed = new EmbedBuilder()
             .setTitle("Moves Used")
             .setAuthor({ name: "HypeMon Leaderboards" })
-            //.setDescription(movess)
+            .setDescription(movess)
 
         const expEmbed = new EmbedBuilder()
             .setTitle("Total EXP")
             .setAuthor({ name: "HypeMon Leaderboards" })
-            //.setDescription(exps)
+            .setDescription(exps)
 
         const levelEmbed = new EmbedBuilder()
             .setTitle("Highest Level")
             .setAuthor({ name: "HypeMon Leaderboards" })
-            //.setDescription(levels)
+            .setDescription(levels)
 
         const geoEmbed = new EmbedBuilder()
             .setTitle("Total Geo Earned")
@@ -57,7 +61,7 @@ module.exports = {
         const winstreakEmbed = new EmbedBuilder()
             .setTitle("Longest Winstreak")
             .setAuthor({ name: "HypeMon Leaderboards" })
-            //.setDescription(winstreaks)
+            .setDescription(winstreaks)
 
         const mainRow = new ActionRowBuilder().addComponents(
             new SelectMenuBuilder()
@@ -103,7 +107,15 @@ module.exports = {
                 .setCustomId('end_int')
         )
 
-        message.channel.send({ embeds: [mainEmbed], components: [mainRow, butRow] });
+        message.channel.send({ embeds: [mainEmbed], components: [mainRow, butRow] }).then(msg => {
+            menuCollector.on('end', async (collected, reason) => {
+                if (reason == 'idle') {
+                    mainRow.components[0].setDisabled(true);
+                    butRow.components[0].setDisabled(true);
+                    msg.edit({ components: [mainRow, butRow] });
+                }
+            });
+        });
 
 
         const butCollector = message.channel.createMessageComponentCollector({ componentType: ComponentType.Button });
