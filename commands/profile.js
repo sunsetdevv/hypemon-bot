@@ -55,14 +55,13 @@ module.exports = {
             
             const profEmbed = new EmbedBuilder()
                 .setTitle(`${user.username}'s Profile | Type: ` + hmType.toString())
-                //.setDescription('')
                 .setColor('BLACK')
                 //.setFooter({ text: 'For more stats, use the drop-down menu below' })
                 .setThumbnail(user.avatarURL())
                 .addFields(
-                    { name: 'Level', value: '`' + level.toString() + '`', inline: true },
-                    { name: 'Experience', value: '`' + exp.toString() + '`', inline: true },
-                    { name: 'Geo', value: '`' + geo.toString() + '`', inline: true },
+                    { name: 'Level <:MaskShard:1035587080635564032>', value: '`' + level.toString() + '`', inline: true },
+                    { name: 'Experience <:Full_Soul_Vessel:1035587089833656390>', value: '`' + exp.toString() + '`', inline: true },
+                    { name: 'Geo <:Geo:1035579816587563099>', value: '`' + geo.toString() + '`', inline: true },
                     { name: 'Move 1', value: '`' + move1.name + '`', inline: true },
                     { name: 'Move 2', value: '`' + move2.name + '`', inline: true },
                     { name: 'Move 3', value: '`' + move3.name + '`', inline: true },
