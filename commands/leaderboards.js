@@ -129,31 +129,37 @@ module.exports = {
             .setTitle("Battles Won")
             .setAuthor({ name: "HypeMon Leaderboards" })
             .setDescription(battles)
+            .setThumbnail('https://cdn.discordapp.com/attachments/983502820248551504/1026986084850204743/lbtrophy.png')
 
         const movesusedEmbed = new EmbedBuilder()
             .setTitle("Moves Used")
             .setAuthor({ name: "HypeMon Leaderboards" })
             .setDescription(movess)
+            .setThumbnail('https://cdn.discordapp.com/attachments/983502820248551504/1026986084850204743/lbtrophy.png')
 
         const expEmbed = new EmbedBuilder()
             .setTitle("Total EXP")
             .setAuthor({ name: "HypeMon Leaderboards" })
             .setDescription(exps)
+            .setThumbnail('https://cdn.discordapp.com/attachments/983502820248551504/1026986084850204743/lbtrophy.png')
 
         const levelEmbed = new EmbedBuilder()
             .setTitle("Highest Level")
             .setAuthor({ name: "HypeMon Leaderboards" })
             .setDescription(levels)
+            .setThumbnail('https://cdn.discordapp.com/attachments/983502820248551504/1026986084850204743/lbtrophy.png')
 
         const geoEmbed = new EmbedBuilder()
             .setTitle("Total Geo Earned")
             .setAuthor({ name: "HypeMon Leaderboards" })
             .setDescription(totalgeos)
+            .setThumbnail('https://cdn.discordapp.com/attachments/983502820248551504/1026986084850204743/lbtrophy.png')
 
         const winstreakEmbed = new EmbedBuilder()
             .setTitle("Longest Winstreak")
             .setAuthor({ name: "HypeMon Leaderboards" })
             .setDescription(winstreaks)
+            .setThumbnail('https://cdn.discordapp.com/attachments/983502820248551504/1026986084850204743/lbtrophy.png')
 
         const mainRow = new ActionRowBuilder().addComponents(
             new SelectMenuBuilder()
