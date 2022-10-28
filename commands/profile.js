@@ -45,6 +45,9 @@ module.exports = {
             const btlsWon = userInDb.get('BTLS_WON');
             const favMoveArray = userInDb.get('FAV_MOVE');
             const statPts = userInDb.get('STAT_PTS');
+            const winstreak = userInDb.get('WINSTREAK');
+            const totalgeo = userInDb.get('TOTAL_GEO');
+            const moves_used = userInDb.get('MOVES_USED');
 
             let favMove;
             if (!favMoveArray.length) {
@@ -67,7 +70,10 @@ module.exports = {
                     { name: 'Move 3', value: '`' + move3.name + '`', inline: true },
                     { name: 'Stat points:', value: '`' + statPts + '`', inline: true },
                     { name: 'Battles won:', value: '`' + btlsWon + '`', inline: true },
-                    { name: 'Favorite move:', value: '`' + favMove + '`', inline: true }
+                    { name: 'Favorite move:', value: '`' + favMove + '`', inline: true },
+                    { name: 'Winstreak:', value: '`' + winstreak + '`', inline: true },
+                    { name: 'Total Geo Gained:', value: '`' + totalgeo + '`', inline: true },
+                    { name: 'Moves used:', value: '`' + moves_used + '`', inline: true }
 
                 )
 
