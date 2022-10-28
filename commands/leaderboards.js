@@ -18,12 +18,104 @@ module.exports = {
         const winstreaks_db = await Players.findAll({ attributes: ['USERNAME', 'WINSTREAK'], order: [['WINSTREAK', 'DESC']] });
         const movess_db = await Players.findAll({ attributes: ['USERNAME', 'MOVES_USED'], order: [['MOVES_USED', 'DESC']] });
 
-        const battles = battles_db.map(t => `**${t.USERNAME}:** ${t.BTLS_WON}`).join('\n');
-        const levels = levels_db.map(t => `**${t.USERNAME}:** ${t.LVL}`).join('\n');
-        const exps = exps_db.map(t => `**${t.USERNAME}:** ${t.EXP}`).join('\n');
-        const totalgeos = totalgeos_db.map(t => `**${t.USERNAME}:** ${t.TOTAL_GEO}`).join('\n');
-        const winstreaks = winstreaks_db.map(t => `**${t.USERNAME}:** ${t.WINSTREAK}`).join('\n');
-        const movess = movess_db.map(t => `**${t.USERNAME}:** ${t.MOVES_USED}`).join('\n');
+        let x = 1;
+        let battles = [];
+        let levels = [];
+        let exps = [];
+        let totalgeos = [];
+        let winstreaks = [];
+        let movess = [];
+
+        for (let i = 0; i < battles_db.length; i++) {
+            if (x == 1) {
+                battles.push('<:first:1035031488292458558> **' + battles_db[i].USERNAME + ':** ' + battles_db[i].BTLS_WON);
+              } else if (x == 2) {
+                battles.push('<:second:1035031531439271946> **' + battles_db[i].USERNAME + ':** ' + battles_db[i].BTLS_WON);
+              } else if (x == 3) {
+                battles.push('<:third:1035031551991349301> **' + battles_db[i].USERNAME + ':** ' + battles_db[i].BTLS_WON);
+              } else {
+                battles.push(battles_db[i].USERNAME + battles_db[i].BTLS_WON);
+              }
+            
+              x++;
+        };
+        x = 1;
+        for (let i = 0; i < levels_db.length; i++) {
+            if (x == 1) {
+                levels.push('<:first:1035031488292458558> **' + levels_db[i].USERNAME + ':** ' + levels_db[i].LVL);
+              } else if (x == 2) {
+                levels.push('<:second:1035031531439271946> **' + levels_db[i].USERNAME + ':** ' + levels_db[i].LVL);
+              } else if (x == 3) {
+                levels.push('<:third:1035031551991349301> **' + levels_db[i].USERNAME + ':** ' + levels_db[i].LVL);
+              } else {
+                levels.push(levels_db[i].USERNAME + levels_db[i].LVL);
+              }
+            
+              x++;
+        };
+        x = 1;
+        for (let i = 0; i < exps_db.length; i++) {
+            if (x == 1) {
+                exps.push('<:first:1035031488292458558> **' + exps_db[i].USERNAME + ':** ' + exps_db[i].EXP);
+              } else if (x == 2) {
+                exps.push('<:second:1035031531439271946> **' + exps_db[i].USERNAME + ':** ' + exps_db[i].EXP);
+              } else if (x == 3) {
+                exps.push('<:third:1035031551991349301> **' + exps_db[i].USERNAME + ':** ' + exps_db[i].EXP);
+              } else {
+                exps.push(exps_db[i].USERNAME + exps_db[i].EXP);
+              }
+            
+              x++;
+        };
+        x = 1;
+        for (let i = 0; i < totalgeos_db.length; i++) {
+            if (x == 1) {
+                totalgeos.push('<:first:1035031488292458558> **' + totalgeos_db[i].USERNAME + ':** ' + totalgeos_db[i].TOTAL_GEO);
+              } else if (x == 2) {
+                totalgeos.push('<:second:1035031531439271946> **' + totalgeos_db[i].USERNAME + ':** ' + totalgeos_db[i].TOTAL_GEO);
+              } else if (x == 3) {
+                totalgeos.push('<:third:1035031551991349301> **' + totalgeos_db[i].USERNAME + ':** ' + totalgeos_db[i].TOTAL_GEO);
+              } else {
+                totalgeos.push(totalgeos_db[i].USERNAME + totalgeos_db[i].TOTAL_GEO);
+              }
+            
+              x++;
+        };
+        x = 1;
+        for (let i = 0; i < winstreaks_db.length; i++) {
+            if (x == 1) {
+                winstreaks.push('<:first:1035031488292458558> **' + winstreaks_db[i].USERNAME + ':** ' + winstreaks_db[i].WINSTREAK);
+              } else if (x == 2) {
+                winstreaks.push('<:second:1035031531439271946> **' + winstreaks_db[i].USERNAME + ':** ' + winstreaks_db[i].WINSTREAK);
+              } else if (x == 3) {
+                winstreaks.push('<:third:1035031551991349301> **' + winstreaks_db[i].USERNAME + ':** ' + winstreaks_db[i].WINSTREAK);
+              } else {
+                winstreaks.push(winstreaks_db[i].USERNAME + winstreaks_db[i].WINSTREAK);
+              }
+            
+              x++;
+        };
+        x = 1;
+        for (let i = 0; i < movess_db.length; i++) {
+            if (x == 1) {
+                movess.push('<:first:1035031488292458558> **' + movess_db[i].USERNAME + ':** ' + movess_db[i].MOVES_USED);
+              } else if (x == 2) {
+                movess.push('<:second:1035031531439271946> **' + movess_db[i].USERNAME + ':** ' + movess_db[i].MOVES_USED);
+              } else if (x == 3) {
+                movess.push('<:third:1035031551991349301> **' + movess_db[i].USERNAME + ':** ' + movess_db[i].MOVES_USED);
+              } else {
+                movess.push(movess_db[i].USERNAME + movess_db[i].MOVES_USED);
+              }
+            
+              x++;
+        };
+
+        battles = battles.join('\n');
+        levels = levels.join('\n');
+        exps = exps.join('\n');
+        totalgeos = totalgeos.join('\n');
+        winstreaks = winstreaks.join('\n');
+        movess = movess.join('\n');
 
         const mainEmbed = new EmbedBuilder()
             .setTitle('HypeMon Leaderboards')
